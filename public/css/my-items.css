@@ -1,0 +1,148 @@
+/* ── HEADER ── */
+.mi-header {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  flex-wrap: wrap; gap: 1rem; margin-bottom: 1.5rem;
+}
+.mi-header h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: 0.2rem; }
+.mi-subtitle   { font-size: 0.9rem; color: var(--text-2); }
+.mi-protected-count { color: var(--teal); font-weight: 600; }
+.mi-lost-count      { color: var(--lost); font-weight: 600; }
+
+/* ── TOOLBAR ── */
+.mi-toolbar {
+  display: flex; align-items: center; gap: 1rem;
+  margin-bottom: 1.5rem; flex-wrap: wrap;
+}
+.mi-search-wrap {
+  flex: 1; min-width: 200px; position: relative;
+  display: flex; align-items: center;
+}
+.mi-search-wrap svg {
+  position: absolute; left: 0.9rem; color: var(--text-muted); pointer-events: none;
+}
+.mi-search {
+  width: 100%; padding: 0.7rem 1rem 0.7rem 2.5rem;
+  background: var(--surface); border: 1.5px solid var(--border);
+  border-radius: var(--radius-sm); font-family: 'DM Sans', sans-serif;
+  font-size: 0.9rem; color: var(--text); outline: none;
+  transition: border-color 0.2s;
+}
+.mi-search:focus { border-color: var(--teal); }
+.mi-search::placeholder { color: var(--text-muted); }
+
+.mi-filters { display: flex; gap: 0.4rem; }
+.mi-filter-btn {
+  padding: 0.5rem 1rem; border-radius: 50px;
+  font-size: 0.83rem; font-weight: 600; cursor: pointer;
+  border: 1.5px solid var(--border);
+  background: var(--surface); color: var(--text-2);
+  transition: all 0.15s;
+}
+.mi-filter-btn:hover       { border-color: var(--teal); color: var(--teal); }
+.mi-filter-btn.active      { background: var(--teal); color: white; border-color: var(--teal); }
+.mi-filter-btn--lost.active { background: var(--lost); border-color: var(--lost); }
+
+/* ── GRID ── */
+.mi-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1rem;
+}
+
+/* ── ITEM CARD ── */
+.mi-card {
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  padding: 1.25rem; display: flex; flex-direction: column; gap: 0.9rem;
+  transition: transform 0.2s, box-shadow 0.2s;
+}
+.mi-card:hover { transform: translateY(-3px); box-shadow: var(--shadow-lg); }
+
+.mi-card-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+}
+.mi-card-icon {
+  width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center;
+}
+.mi-icon--electronics      { background: #e8f4fd; color: #3b82f6; }
+.mi-icon--travel           { background: #fef3e8; color: var(--lost); }
+.mi-icon--personal         { background: var(--teal-light); color: var(--teal); }
+.mi-icon--keys             { background: #fef3e8; color: #d97706; }
+.mi-icon--bags-&-luggage   { background: #f0eeff; color: #7c3aed; }
+.mi-icon--bags-luggage     { background: #f0eeff; color: #7c3aed; }
+.mi-icon--documents        { background: #e8f4fd; color: #3b82f6; }
+.mi-icon--jewelry          { background: #fff8e8; color: #d97706; }
+.mi-icon--other            { background: var(--bg); color: var(--text-muted); }
+
+.mi-badge {
+  padding: 0.25rem 0.65rem; border-radius: 50px;
+  font-size: 0.72rem; font-weight: 700;
+}
+.mi-badge--protected { background: #e6f7f4; color: var(--teal); }
+.mi-badge--lost      { background: #fdeede; color: var(--lost); }
+.mi-badge--found     { background: #e6f7f4; color: var(--teal); }
+
+.mi-card-body { flex: 1; }
+.mi-card-name {
+  font-family: 'Sora', sans-serif; font-weight: 700;
+  font-size: 0.97rem; margin-bottom: 4px;
+}
+.mi-card-meta { font-size: 0.78rem; color: var(--text-muted); }
+
+.mi-card-actions {
+  display: flex; align-items: center; gap: 0.5rem;
+  padding-top: 0.75rem; border-top: 1px solid var(--border);
+}
+.mi-action-btn {
+  flex: 1; display: flex; align-items: center; justify-content: center; gap: 6px;
+  padding: 0.5rem; border-radius: var(--radius-sm);
+  background: var(--bg); border: 1px solid var(--border);
+  font-size: 0.82rem; font-weight: 600; color: var(--text-2);
+  text-decoration: none; transition: all 0.15s;
+}
+.mi-action-btn:hover { background: var(--teal-light); color: var(--teal); border-color: var(--teal); }
+.mi-eye-btn {
+  width: 34px; height: 34px; border-radius: var(--radius-sm);
+  background: var(--bg); border: 1px solid var(--border);
+  display: grid; place-items: center; color: var(--text-muted);
+  text-decoration: none; transition: all 0.15s; flex-shrink: 0;
+}
+.mi-eye-btn:hover { background: var(--teal-light); color: var(--teal); border-color: var(--teal); }
+
+/* ── ADD CARD ── */
+.mi-card--add {
+  border: 2px dashed var(--border); background: transparent;
+  align-items: center; justify-content: center; text-align: center;
+  text-decoration: none; color: var(--text-2); min-height: 180px;
+  cursor: pointer;
+}
+.mi-card--add:hover {
+  border-color: var(--teal); color: var(--teal);
+  background: var(--teal-light); transform: translateY(-3px);
+}
+.mi-add-icon { color: var(--text-muted); margin-bottom: 0.5rem; }
+.mi-card--add:hover .mi-add-icon { color: var(--teal); }
+.mi-add-label { font-family: 'Sora', sans-serif; font-weight: 700; font-size: 0.95rem; }
+.mi-add-sub   { font-size: 0.78rem; color: var(--text-muted); margin-top: 4px; }
+
+/* ── EMPTY ── */
+.mi-empty {
+  text-align: center; padding: 4rem 2rem;
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.mi-empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+.mi-empty h3   { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+.mi-empty p    { color: var(--text-2); }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 600px) {
+  .mi-toolbar { flex-direction: column; align-items: stretch; }
+  .mi-filters { flex-wrap: wrap; }
+  .mi-grid    { grid-template-columns: 1fr 1fr; }
+  .mi-header  { flex-direction: column; }
+}
+@media (max-width: 400px) {
+  .mi-grid { grid-template-columns: 1fr; }
+}

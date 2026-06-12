@@ -1,0 +1,162 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>My Items — FIRTA</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/my-items.css">
+</head>
+<body class="dashboard-layout">
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<button class="sidebar-toggle" id="sidebarToggle">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<aside class="sidebar">
+  <a href="/dashboard" class="sidebar-logo" style="text-decoration:none">
+    <div class="logo-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div>
+    <span>FIRTA</span>
+  </a>
+  <div class="sidebar-label">NAVIGATION</div>
+  <nav class="sidebar-nav">
+    <a href="/dashboard" class="sidebar-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="/my-items" class="sidebar-link active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg>
+      My Items
+    </a>
+    <a href="/settings" class="sidebar-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar"><%= user.name.charAt(0).toUpperCase() %></div>
+    <div class="user-info">
+      <div class="user-name"><%= user.name %></div>
+      <div class="user-plan"><%= user.plan %> Plan</div>
+    </div>
+  </div>
+  <a href="/logout" class="logout-link">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Log Out
+  </a>
+</aside>
+
+<main class="main-content">
+  <% if (flash_error) { %><div class="alert alert-error"><%= flash_error %></div><% } %>
+  <% if (flash_success) { %><div class="alert alert-success"><%= flash_success %></div><% } %>
+
+  <!-- Header -->
+  <div class="mi-header">
+    <div>
+      <h1>My Items</h1>
+      <p class="mi-subtitle">
+        <%= items.length %> Items Total
+        <% const protected_count = items.filter(i => !i.lost_mode).length; %>
+        <% const lost_count = items.filter(i => i.lost_mode).length; %>
+        • <span class="mi-protected-count"><%= protected_count %> Protected</span>
+        <% if (lost_count > 0) { %> • <span class="mi-lost-count"><%= lost_count %> Lost</span><% } %>
+      </p>
+    </div>
+    <a href="/add-item" class="btn btn-primary btn-sm">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      Register New Item
+    </a>
+  </div>
+
+  <!-- Search & Filter -->
+  <div class="mi-toolbar">
+    <div class="mi-search-wrap">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+      <input type="text" id="searchInput" class="mi-search" placeholder="Search by name, category, or ID..." oninput="filterItems()" />
+    </div>
+    <div class="mi-filters">
+      <button class="mi-filter-btn active" onclick="setFilter('all', this)">All Items</button>
+      <button class="mi-filter-btn" onclick="setFilter('protected', this)">Protected</button>
+      <button class="mi-filter-btn mi-filter-btn--lost" onclick="setFilter('lost', this)">Lost</button>
+    </div>
+  </div>
+
+  <% if (items.length === 0) { %>
+  <div class="mi-empty">
+    <div class="mi-empty-icon">📦</div>
+    <h3>No items yet</h3>
+    <p>Register your first item to protect it with a FIRTA QR tag.</p>
+    <a href="/add-item" class="btn btn-primary" style="margin-top:1.25rem">Register Your First Item</a>
+  </div>
+  <% } else { %>
+  <div class="mi-grid" id="itemsGrid">
+    <% items.forEach(item => { %>
+    <div class="mi-card" data-name="<%= item.name.toLowerCase() %>" data-cat="<%= item.category.toLowerCase() %>" data-tag="<%= item.tag_id.toLowerCase() %>" data-status="<%= item.lost_mode ? 'lost' : 'protected' %>">
+      <div class="mi-card-top">
+        <div class="mi-card-icon mi-icon--<%= item.category.toLowerCase().replace(/[\s&]+/g,'-') %>">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+        </div>
+        <% if (item.lost_mode) { %>
+          <span class="mi-badge mi-badge--lost">Lost</span>
+        <% } else if (item.status === 'found') { %>
+          <span class="mi-badge mi-badge--found">Found</span>
+        <% } else { %>
+          <span class="mi-badge mi-badge--protected">Protected</span>
+        <% } %>
+      </div>
+      <div class="mi-card-body">
+        <h3 class="mi-card-name"><%= item.name %></h3>
+        <p class="mi-card-meta">Last seen: <span data-utc="<%= item.updated_at || item.created_at %>" data-format="date">--</span></p>
+      </div>
+      <div class="mi-card-actions">
+        <a href="/item/<%= item.tag_id %>" class="mi-action-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg>
+          Manage QR
+        </a>
+        <a href="/item/<%= item.tag_id %>/messages" class="mi-eye-btn" title="View messages">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </a>
+      </div>
+    </div>
+    <% }) %>
+
+    <!-- Register New Item card -->
+    <a href="/add-item" class="mi-card mi-card--add">
+      <div class="mi-add-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="16"/><line x1="8" y1="12" x2="16" y2="12"/></svg>
+      </div>
+      <div class="mi-add-label">Register New Item</div>
+      <div class="mi-add-sub">Add security to your valuables</div>
+    </a>
+  </div>
+  <% } %>
+</main>
+
+<script src="/js/mobile.js"></script>
+<script src="/js/time.js"></script>
+<script>
+let currentFilter = 'all';
+
+function filterItems() {
+  const q = document.getElementById('searchInput').value.toLowerCase();
+  document.querySelectorAll('.mi-card[data-name]').forEach(card => {
+    const matchSearch = !q ||
+      card.dataset.name.includes(q) ||
+      card.dataset.cat.includes(q) ||
+      card.dataset.tag.includes(q);
+    const matchFilter = currentFilter === 'all' ||
+      card.dataset.status === currentFilter;
+    card.style.display = (matchSearch && matchFilter) ? '' : 'none';
+  });
+}
+
+function setFilter(filter, btn) {
+  currentFilter = filter;
+  document.querySelectorAll('.mi-filter-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  filterItems();
+}
+</script>
+</body>
+</html>

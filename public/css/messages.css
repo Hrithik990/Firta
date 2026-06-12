@@ -1,0 +1,129 @@
+.messages-header {
+  display: flex; align-items: flex-start; gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+.messages-header h1 { font-size: 1.7rem; font-weight: 700; margin-bottom: 0.2rem; }
+
+.no-messages {
+  text-align: center; padding: 4rem 2rem;
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border);
+}
+.no-msg-icon { font-size: 3rem; margin-bottom: 1rem; }
+.no-messages h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 0.5rem; }
+.no-messages p  { color: var(--text-2); font-size: 0.93rem; }
+
+.messages-list { display: flex; flex-direction: column; gap: 1.25rem; }
+
+.message-card {
+  background: var(--surface); border-radius: var(--radius);
+  border: 1px solid var(--border); box-shadow: var(--shadow);
+  overflow: hidden;
+}
+
+.msg-card-header {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 1.25rem 1.5rem; border-bottom: 1px solid var(--border);
+  flex-wrap: wrap; gap: 0.75rem;
+}
+.msg-finder-info { display: flex; align-items: center; gap: 12px; }
+.msg-avatar {
+  width: 42px; height: 42px; border-radius: 50%;
+  background: var(--teal); color: white;
+  font-family: 'Sora', sans-serif; font-weight: 700; font-size: 1.1rem;
+  display: grid; place-items: center; flex-shrink: 0;
+}
+.msg-finder-name { font-weight: 600; font-size: 0.95rem; margin-bottom: 2px; }
+.msg-time { font-size: 0.78rem; color: var(--text-muted); }
+
+.msg-location-badge {
+  display: flex; align-items: center; gap: 5px;
+  background: var(--teal-light); color: var(--teal);
+  padding: 0.3rem 0.75rem; border-radius: 50px;
+  font-size: 0.78rem; font-weight: 600;
+}
+
+.msg-content {
+  padding: 1.25rem 1.5rem;
+  font-style: italic; color: var(--text-2);
+  line-height: 1.65; font-size: 0.95rem;
+  border-bottom: 1px solid var(--border);
+  margin: 0;
+}
+
+.msg-location-section { padding: 1.25rem 1.5rem; }
+.msg-location-info {
+  display: flex; align-items: center; gap: 8px; flex-wrap: wrap;
+  font-size: 0.88rem; color: var(--text-2); margin-bottom: 1rem;
+}
+.maps-link {
+  color: var(--teal); font-weight: 600; font-size: 0.82rem;
+  transition: opacity 0.2s;
+}
+.maps-link:hover { opacity: 0.75; }
+.msg-map {
+  height: 200px; border-radius: var(--radius-sm);
+  border: 1px solid var(--border); overflow: hidden;
+}
+
+/* Finder page location bar */
+.location-bar {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--surface); border: 1px solid var(--border);
+  border-radius: var(--radius-sm); padding: 0.75rem 1.25rem;
+  font-size: 0.88rem; color: var(--text-2);
+  margin-bottom: 1.5rem; transition: all 0.3s;
+}
+.location-bar--success {
+  background: var(--teal-light); border-color: var(--teal-mid); color: var(--teal);
+}
+.location-bar--denied {
+  background: #fff1f0; border-color: #fdd; color: var(--danger);
+}
+.loc-spinner {
+  width: 16px; height: 16px; border-radius: 50%; flex-shrink: 0;
+  border: 2px solid var(--border); border-top-color: var(--teal);
+  animation: spin 0.8s linear infinite;
+}
+@keyframes spin { to { transform: rotate(360deg); } }
+
+/* Finder map */
+.finder-map-wrap { margin-top: 1.5rem; }
+.finder-map-label {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 0.85rem; font-weight: 600; color: var(--text-2);
+  margin-bottom: 0.6rem;
+}
+.finder-map-note {
+  font-size: 0.78rem; color: var(--text-muted);
+  margin-top: 0.5rem; line-height: 1.5;
+}
+
+/* Message success */
+.msg-success-box {
+  display: flex; align-items: center; gap: 10px;
+  background: var(--teal-light); color: var(--teal);
+  border: 1px solid var(--teal-mid); border-radius: var(--radius-sm);
+  padding: 1rem 1.25rem; font-weight: 600; font-size: 0.93rem;
+  margin-top: 0.75rem;
+}
+
+/* Form input in finder */
+.form-input, .form-textarea {
+  width: 100%; background: var(--bg);
+  border: 1.5px solid var(--border); border-radius: var(--radius-sm);
+  padding: 0.8rem 1rem; font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem; color: var(--text); outline: none;
+  transition: border-color 0.2s;
+}
+.form-input:focus, .form-textarea:focus {
+  border-color: var(--teal);
+  box-shadow: 0 0 0 3px rgba(13,158,130,0.1);
+}
+.form-textarea { min-height: 90px; resize: vertical; }
+.form-group { margin-bottom: 0.75rem; }
+
+@media (max-width: 768px) {
+  .msg-card-header { flex-direction: column; align-items: flex-start; }
+  .msg-map { height: 160px; }
+}

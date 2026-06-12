@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile Settings — FIRTA</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/settings.css">
+</head>
+<body class="dashboard-layout">
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<button class="sidebar-toggle" id="sidebarToggle">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<aside class="sidebar">
+  <a href="/dashboard" class="sidebar-logo" style="text-decoration:none">
+    <div class="logo-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div>
+    <span>FIRTA</span>
+  </a>
+  <div class="sidebar-label">NAVIGATION</div>
+  <nav class="sidebar-nav">
+    <a href="/dashboard" class="sidebar-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="/my-items" class="sidebar-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg>
+      My Items
+    </a>
+    <a href="/settings" class="sidebar-link active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-4 0v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 010-4h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 012.83-2.83l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 014 0v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 2.83l-.06.06A1.65 1.65 0 0019.4 9a1.65 1.65 0 001.51 1H21a2 2 0 010 4h-.09a1.65 1.65 0 00-1.51 1z"/></svg>
+      Settings
+    </a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar"><%= sessionUser.name.charAt(0).toUpperCase() %></div>
+    <div class="user-info">
+      <div class="user-name"><%= sessionUser.name %></div>
+      <div class="user-plan"><%= sessionUser.plan %> Plan</div>
+    </div>
+  </div>
+  <a href="/logout" class="logout-link">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Log Out
+  </a>
+</aside>
+
+<main class="main-content">
+  <% if (flash_error) { %>
+  <div class="alert alert-error"><%= flash_error %></div>
+  <% } %>
+  <% if (flash_success) { %>
+  <div class="alert alert-success"><%= flash_success %></div>
+  <% } %>
+
+  <div class="settings-page-header">
+    <h1>Profile Settings</h1>
+    <p>Update your personal details and account security.</p>
+  </div>
+
+  <div class="settings-sections">
+
+    <!-- ── PROFILE INFORMATION ── -->
+    <div class="settings-section">
+      <div class="settings-section-label">PROFILE INFORMATION</div>
+      <form action="/settings" method="POST" id="profileForm">
+        <input type="hidden" name="_type" value="profile">
+
+        <div class="settings-field-row settings-field-row--2">
+          <div class="settings-field">
+            <label class="settings-label">Full Name</label>
+            <div class="settings-input-wrap">
+              <input type="text" name="fullName" class="settings-input"
+                value="<%= user.full_name %>" required />
+              <div class="settings-input-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
+              </div>
+            </div>
+          </div>
+          <div class="settings-field">
+            <label class="settings-label">Phone Number <span class="optional">(shown when lost)</span></label>
+            <div class="settings-input-wrap">
+              <input type="tel" name="phone" class="settings-input"
+                value="<%= user.phone || '' %>" placeholder="+977 98XXXXXXXX" />
+              <div class="settings-input-icon">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.9 11.5 19.79 19.79 0 01.86 2.82 2 2 0 012.84.84h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L7.09 8.49a16 16 0 006.29 6.29l1.81-1.81a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-field">
+          <label class="settings-label">Email Address <span class="optional">(cannot be changed)</span></label>
+          <div class="settings-input-wrap">
+            <input type="email" class="settings-input settings-input--disabled"
+              value="<%= user.email %>" disabled />
+            <div class="settings-input-icon">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
+            </div>
+          </div>
+        </div>
+
+        <div class="settings-field">
+          <label class="settings-label">Short Bio <span class="optional">(Optional)</span></label>
+          <textarea name="bio" class="settings-textarea"
+            placeholder="Tell us a little bit about yourself..."><%= user.bio || '' %></textarea>
+        </div>
+
+        <div class="settings-actions">
+          <button type="button" class="btn btn-outline btn-sm" onclick="document.getElementById('profileForm').reset()">Discard</button>
+          <button type="submit" class="btn btn-primary btn-sm">Save Changes</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ── CHANGE PASSWORD ── -->
+    <div class="settings-section">
+      <div class="settings-section-label">CHANGE PASSWORD</div>
+      <form action="/settings" method="POST" id="passwordForm" onsubmit="return validatePwForm()">
+        <input type="hidden" name="_type" value="password">
+
+        <div class="settings-field">
+          <label class="settings-label">Current Password</label>
+          <div class="settings-input-wrap">
+            <input type="password" id="curPw" name="currentPassword"
+              class="settings-input" placeholder="Enter your current password" />
+            <button type="button" class="settings-eye-btn" onclick="togglePw('curPw',this)">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+            </button>
+          </div>
+        </div>
+
+        <div class="settings-field-row settings-field-row--2">
+          <div class="settings-field">
+            <label class="settings-label">New Password</label>
+            <div class="settings-input-wrap">
+              <input type="password" id="newPw" name="newPassword"
+                class="settings-input" placeholder="Min. 8 characters"
+                oninput="checkPwStrength(this.value)" />
+              <button type="button" class="settings-eye-btn" onclick="togglePw('newPw',this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="pw-strength" id="pwStrength" style="display:none">
+              <div class="pw-bar" id="pwBar"></div>
+            </div>
+            <div class="pw-hint" id="pwHint"></div>
+          </div>
+          <div class="settings-field">
+            <label class="settings-label">Confirm New Password</label>
+            <div class="settings-input-wrap">
+              <input type="password" id="confirmPw" name="confirmNewPassword"
+                class="settings-input" placeholder="Repeat new password"
+                oninput="checkPwMatch()" />
+              <button type="button" class="settings-eye-btn" onclick="togglePw('confirmPw',this)">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+              </button>
+            </div>
+            <div class="pw-match-hint" id="pwMatchHint"></div>
+          </div>
+        </div>
+
+        <div class="settings-actions">
+          <button type="submit" class="btn btn-primary btn-sm">Update Password</button>
+        </div>
+      </form>
+    </div>
+
+    <!-- ── ACCOUNT ── -->
+    <div class="settings-section settings-section--danger">
+      <div class="settings-section-label">ACCOUNT</div>
+      <div class="danger-row">
+        <div>
+          <div class="danger-title">Sign out of all devices</div>
+          <div class="danger-desc">Removes your active session across all devices.</div>
+        </div>
+        <a href="/logout" class="btn btn-outline btn-sm">Sign Out</a>
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script src="/js/mobile.js"></script>
+<script>
+function togglePw(id, btn) {
+  const i = document.getElementById(id);
+  i.type = i.type === 'password' ? 'text' : 'password';
+  btn.style.color = i.type === 'text' ? 'var(--teal)' : '';
+}
+
+function checkPwStrength(val) {
+  const bar = document.getElementById('pwBar');
+  const s   = document.getElementById('pwStrength');
+  const h   = document.getElementById('pwHint');
+  if (!val) { s.style.display = 'none'; h.textContent = ''; return; }
+  s.style.display = 'block';
+  let score = 0;
+  if (val.length >= 8)           score++;
+  if (/[A-Z]/.test(val))         score++;
+  if (/[0-9]/.test(val))         score++;
+  if (/[^A-Za-z0-9]/.test(val)) score++;
+  const colors = ['#e05252','#e07b3a','#f0c040','#0d9e82'];
+  const labels = ['Weak','Fair','Good','Strong'];
+  bar.style.width     = (score * 25) + '%';
+  bar.style.background = colors[score - 1] || '#e2ecea';
+  h.textContent  = labels[score - 1] || '';
+  h.style.color  = colors[score - 1] || '';
+}
+
+function checkPwMatch() {
+  const np = document.getElementById('newPw').value;
+  const cp = document.getElementById('confirmPw').value;
+  const h  = document.getElementById('pwMatchHint');
+  if (!cp) { h.textContent = ''; return; }
+  if (np === cp) {
+    h.textContent = '✓ Passwords match';
+    h.style.color = 'var(--teal)';
+  } else {
+    h.textContent = '✗ Passwords do not match';
+    h.style.color = 'var(--danger)';
+  }
+}
+
+function validatePwForm() {
+  const cur = document.getElementById('curPw').value;
+  const np  = document.getElementById('newPw').value;
+  const cp  = document.getElementById('confirmPw').value;
+
+  if (!cur) { alert('Please enter your current password.'); return false; }
+  if (!np)  { alert('Please enter a new password.'); return false; }
+  if (np.length < 8) { alert('New password must be at least 8 characters.'); return false; }
+  if (np !== cp) { alert('New passwords do not match.'); return false; }
+  return true;
+}
+</script>
+</body>
+</html>

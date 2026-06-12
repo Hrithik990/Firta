@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title><%= item.name %> — FIRTA</title>
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/dashboard.css">
+  <link rel="stylesheet" href="/css/item-detail.css">
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"/>
+</head>
+<body class="dashboard-layout">
+
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+<button class="sidebar-toggle" id="sidebarToggle">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5"><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+</button>
+
+<aside class="sidebar">
+  <a href="/dashboard" class="sidebar-logo" style="text-decoration:none">
+    <div class="logo-icon"><svg viewBox="0 0 24 24" width="18" height="18" fill="none" stroke="white" stroke-width="2.5"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8 7V5a2 2 0 012-2h4a2 2 0 012 2v2"/></svg></div>
+    <span>FIRTA</span>
+  </a>
+  <div class="sidebar-label">NAVIGATION</div>
+  <nav class="sidebar-nav">
+    <a href="/dashboard" class="sidebar-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>
+      Dashboard
+    </a>
+    <a href="/my-items" class="sidebar-link active">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 7H4a2 2 0 00-2 2v10a2 2 0 002 2h16a2 2 0 002-2V9a2 2 0 00-2-2z"/></svg>
+      My Items
+    </a>
+    <a href="/item/<%= item.tag_id %>/messages" class="sidebar-link">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+      Messages <span class="msg-badge" id="unreadBadge" style="display:none"></span>
+    </a>
+  </nav>
+  <div class="sidebar-user">
+    <div class="user-avatar"><%= user.name.charAt(0).toUpperCase() %></div>
+    <div class="user-info">
+      <div class="user-name"><%= user.name %></div>
+      <div class="user-plan"><%= user.plan %> Plan</div>
+    </div>
+  </div>
+  <a href="/add-item" class="btn btn-primary sidebar-reg-btn">Register New Item</a>
+  <a href="/logout" class="logout-link">
+    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 01-2-2V5a2 2 0 012-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+    Log Out
+  </a>
+</aside>
+
+<main class="main-content">
+  <% if (flash_error) { %><div class="alert alert-error"><%= flash_error %></div><% } %>
+  <% if (flash_success) { %><div class="alert alert-success"><%= flash_success %></div><% } %>
+
+  <div class="item-detail-header">
+    <a href="/dashboard" class="back-btn">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="15 18 9 12 15 6"/></svg>
+    </a>
+    <h1><%= item.name %></h1>
+    <div class="lost-mode-toggle">
+      <label class="toggle-switch">
+        <input type="checkbox" id="lostToggle" <%= item.lost_mode ? 'checked' : '' %> onchange="toggleLostMode()">
+        <span class="toggle-track"></span>
+      </label>
+      <span class="lost-mode-label" id="lostLabel">Lost Mode: <strong><%= item.lost_mode ? 'ON' : 'OFF' %></strong></span>
+    </div>
+  </div>
+
+  <div class="item-detail-grid">
+    <!-- QR Card -->
+    <div class="qr-card card">
+      <div class="qr-display">
+        <% if (item.qr_image_path) { %>
+          <img src="<%= item.qr_image_path %>" alt="QR Code" width="200" height="200" style="border-radius:8px"/>
+        <% } else { %>
+          <div style="width:200px;height:200px;background:var(--bg);border-radius:8px;display:grid;place-items:center;color:var(--text-muted)">No QR</div>
+        <% } %>
+        <div class="qr-label">Tag: <%= item.tag_id %></div>
+      </div>
+      <div class="qr-actions">
+        <% if (item.qr_image_path) { %>
+        <a href="<%= item.qr_image_path %>" download="firta-<%= item.tag_id %>.png" class="btn btn-primary btn-sm qr-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Download QR
+        </a>
+        <% } %>
+        <a href="/item/<%= item.tag_id %>/messages" class="btn btn-outline btn-sm qr-btn">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 01-2 2H7l-4 4V5a2 2 0 012-2h14a2 2 0 012 2z"/></svg>
+          Messages
+        </a>
+        <form action="/item/<%= item.tag_id %>/delete" method="POST" onsubmit="return confirm('Delete this item?')">
+          <button type="submit" class="btn btn-sm" style="background:#fff1f0;color:var(--danger);border:1.5px solid #fdd;width:100%">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 01-2 2H8a2 2 0 01-2-2L5 6"/></svg>
+            Delete Item
+          </button>
+        </form>
+      </div>
+      <div class="privacy-card">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="var(--teal)" stroke-width="2.5"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+        <div>
+          <strong>Privacy First Design</strong>
+          <p>QR is encrypted. Contact info only shared when Lost Mode is ON.</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- Stats Panel -->
+    <div class="stats-panel card">
+      <h2>Usage Statistics</h2>
+      <div class="usage-grid">
+        <div class="usage-box">
+          <div class="usage-label">TOTAL SCANS</div>
+          <div class="usage-num"><%= scans.total_scans || 0 %></div>
+        </div>
+        <div class="usage-box">
+          <div class="usage-label">LAST SCANNED</div>
+          <div class="usage-num usage-num--muted">
+            <span data-utc="<%= scans.last_scanned || '' %>" data-format="time">Loading...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Last scan map -->
+      <% if (scans.last_lat && scans.last_lng) { %>
+      <div class="safe-zone-header" style="margin-top:1.25rem">
+        <span class="safe-zone-title">Last Scanned Location</span>
+        <a href="https://www.google.com/maps?q=<%= scans.last_lat %>,<%= scans.last_lng %>" target="_blank" class="edit-zone-link">Open in Maps</a>
+      </div>
+      <div id="lastScanMap" style="height:200px;border-radius:var(--radius-sm);border:1px solid var(--border);overflow:hidden;margin-bottom:1rem"
+           data-lat="<%= scans.last_lat %>" data-lng="<%= scans.last_lng %>"></div>
+      <% if (scans.last_location) { %>
+      <p style="font-size:0.82rem;color:var(--text-muted);margin-bottom:1rem">📍 <%= scans.last_location %></p>
+      <% } %>
+      <% } else { %>
+      <div class="map-placeholder" style="margin-top:1.25rem;margin-bottom:1rem">
+        <div class="map-grid"></div>
+        <div class="safe-zone-badge">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><circle cx="12" cy="10" r="3"/><path d="M12 2a8 8 0 000 16"/></svg>
+          No scan location yet
+        </div>
+      </div>
+      <% } %>
+
+      <div class="item-meta">
+        <div class="meta-row"><span>Category</span><strong><%= item.category %></strong></div>
+        <div class="meta-row"><span>Status</span>
+          <span class="badge badge-<%= item.status === 'lost' ? 'lost' : item.status === 'found' ? 'found' : 'pending' %>">
+            <%= item.status.charAt(0).toUpperCase() + item.status.slice(1) %>
+          </span>
+        </div>
+        <div class="meta-row"><span>Registered</span><strong><span data-utc="<%= item.created_at %>", data-format="date">Loading...</span></strong></div>
+      </div>
+
+      <div class="finder-link-box">
+        <p class="finder-link-label">Public finder link:</p>
+        <div class="finder-link-row">
+          <code id="finderLink">/finder/<%= item.tag_id %></code>
+          <button class="copy-btn" onclick="copyLink()">Copy</button>
+        </div>
+      </div>
+
+      <div class="lost-status-info" id="lostStatusInfo" style="margin-top:1rem">
+        <div class="lsi-dot" style="background:<%= item.lost_mode ? 'var(--danger)' : 'var(--teal-mid)' %>"></div>
+        <span>Lost Mode: <strong id="lsiStatus"><%= item.lost_mode ? 'Active' : 'Inactive' %></strong></span>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+<script src="/js/time.js"></script>
+<script src="/js/mobile.js"></script>
+<script>
+// Render last scan map if location available
+const mapEl = document.getElementById('lastScanMap');
+if (mapEl) {
+  const lat = parseFloat(mapEl.dataset.lat);
+  const lng = parseFloat(mapEl.dataset.lng);
+  const map = L.map('lastScanMap', { zoomControl: true, attributionControl: false, scrollWheelZoom: false })
+    .setView([lat, lng], 14);
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png').addTo(map);
+  L.circleMarker([lat, lng], {
+    radius: 10, fillColor: '#0d9e82', color: 'white', weight: 3, fillOpacity: 1,
+  }).addTo(map).bindPopup('Last scan location').openPopup();
+}
+
+// Unread badge
+fetch('/api/unread-count').then(r=>r.json()).then(d=>{
+  if (d.count > 0) {
+    const badge = document.getElementById('unreadBadge');
+    badge.textContent = d.count;
+    badge.style.display = 'inline-flex';
+  }
+});
+
+async function toggleLostMode() {
+  const isOn = document.getElementById('lostToggle').checked;
+  const label = document.getElementById('lostLabel');
+  const dot   = document.querySelector('.lsi-dot');
+  try {
+    const res  = await fetch('/item/<%= item.tag_id %>/toggle-lost', { method: 'POST' });
+    const data = await res.json();
+    if (data.ok) {
+      label.innerHTML = `Lost Mode: <strong>${data.lostMode ? 'ON' : 'OFF'}</strong>`;
+      label.style.color = data.lostMode ? 'var(--danger)' : '';
+      document.getElementById('lsiStatus').textContent = data.lostMode ? 'Active' : 'Inactive';
+      dot.style.background = data.lostMode ? 'var(--danger)' : 'var(--teal-mid)';
+    }
+  } catch(e) { console.error(e); }
+}
+
+function copyLink() {
+  const text = window.location.origin + '/finder/<%= item.tag_id %>';
+  navigator.clipboard.writeText(text).then(() => {
+    const btn = document.querySelector('.copy-btn');
+    btn.textContent = 'Copied!'; btn.style.color = 'var(--teal)';
+    setTimeout(() => { btn.textContent = 'Copy'; btn.style.color = ''; }, 2000);
+  });
+}
+</script>
+</body>
+</html>
